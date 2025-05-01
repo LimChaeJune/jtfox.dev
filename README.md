@@ -1,1 +1,3 @@
-# jtfox.dev
+# Astro Fox 🦊
+
+0l. jtfox.dev
