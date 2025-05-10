@@ -1,9 +1,9 @@
 ---
-title: "E-commerce Platform Redesign"
-company: "TechSolutions Inc."
-startDate: "2023-01-15"
-endDate: "2023-06-30"
-domain: "e-commerce"
+title: "Saige Vision V2"
+company: "Saige"
+startDate: "2024-01-15"
+endDate: "2025-03-01"
+domain: "AI"
 summary: "Led the frontend redesign of a major e-commerce platform, improving conversion rates by 25%"
 image: "/images/ecommerce-project.jpg"
 technologies: ["React", "TypeScript", "TailwindCSS", "Redux", "GraphQL"]

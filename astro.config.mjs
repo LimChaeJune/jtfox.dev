@@ -11,7 +11,6 @@ export default defineConfig({
   site: "https://jtfox.dev",
 
   build: {
-    format: "file",
     inlineStylesheets: "auto",
   },
   integrations: [
