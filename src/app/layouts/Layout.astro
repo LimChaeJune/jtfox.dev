@@ -5,22 +5,21 @@ import Footer from "./Footer.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
 
 interface Props {
-  title: string;
   description?: string;
 }
 
-const { title, description } = Astro.props;
+const { description } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="light">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead description={description} />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>jtfox.dev</title>
   </head>
 
   <body

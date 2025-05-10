@@ -49,10 +49,7 @@ const estimatedReadTimeText = readingTime(post.body);
 const tags = post.data.tags || [];
 ---
 
-<Layout
-  title={post.data.title}
-  description={post.data.summary || `${post.data.title} | jtfox.dev`}
->
+<Layout description={post.data.summary || `${post.data.title} | jtfox.dev`}>
   <main class="max-w-3xl mx-auto px-4 pt-12">
     <Animation>
       {

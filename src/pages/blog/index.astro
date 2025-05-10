@@ -8,6 +8,6 @@ const posts = await getAllBlogPosts();
 const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 ---
 
-<Layout title="Blog | jtfox.dev">
+<Layout>
   <BlogPage posts={posts} allTags={allTags} client:load />
 </Layout>
