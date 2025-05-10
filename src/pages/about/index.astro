@@ -20,24 +20,42 @@ const records = await getCollection("projects");
         <div class="space-y-4">
           <TimelineItem
             title="Saige"
-            subtitle="Frontend Developer | 2023.08-Present"
-            startDate={new Date("2021-01-01")}
-            endDate={new Date()}
-            description="Developing and maintaining AI-powered applications, focusing on user experience and performance optimization"
+            link="https://saige.ai"
+            subtitle="Frontend Developer"
+            startDate={new Date("2022-08-14")}
+            endDate={"Present"}
+            description="AI VISION 솔루션인 Saige Vision의 차세대 버전인 V2 Frontend Part Maintainer로 근무하고 있습니다."
           />
+        </div>
+        <div class="mt-6 border-t pt-4">
+          <h3 class="text-xl font-semibold mb-3">Freelance</h3>
           <TimelineItem
-            title="Previous Company"
-            subtitle="Senior Developer | 2018-2021"
-            startDate={new Date("2018-01-01")}
-            endDate={new Date("2021-12-31")}
-            description="Led development team in creating enterprise web solutions and improving application architecture"
+            title="KT DS"
+            link="https://www.ktds.com"
+            subtitle="Frontend Developer"
+            startDate={new Date("2020-09-01")}
+            endDate={new Date("2022-03-01")}
+            description="DS의 메타버스 신사업에 참여하여 FrontEnd 개발자로 근무하였습니다."
           />
+          <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
           <TimelineItem
-            title="Startup Inc."
-            subtitle="Junior Developer | 2016-2018"
-            startDate={new Date("2016-01-01")}
-            endDate={new Date("2018-12-31")}
-            description="Developed frontend components and implemented responsive designs for web applications"
+            title="평화이즈"
+            link="https://www.phis.co.kr"
+            subtitle="Desktop Application Developer"
+            startDate={new Date("2020-02-01")}
+            endDate={new Date("2020-08-01")}
+            description="의료 진료관리 시스템의 데이터 시각화 파트를 담당하여 개발하였습니다."
+          />
+
+          <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
+
+          <TimelineItem
+            title="부산은행"
+            link="https://www.busanbank.co.kr/"
+            subtitle="Desktop Application Developer"
+            startDate={new Date("2019-11-01")}
+            endDate={new Date("2020-01-01")}
+            description="부산은행 RiskWise 투자관리 시스템의 Winform 기반 SQL 쿼리 관리 기능 개발 담당했습니다."
           />
         </div>
       </Section>
@@ -49,58 +67,9 @@ const records = await getCollection("projects");
       <Section id="github" title="Presentation">
         <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
           <h3 class="text-xl font-semibold mb-3">GitHub Contributions</h3>
-          <p class="mb-2">
-            Over 500+ contributions in the last year, focusing on open-source
-            projects in the React and TypeScript ecosystem.
-          </p>
-          <div class="flex flex-wrap gap-2 mt-3">
-            {
-              ["React", "TypeScript", "Next.js", "Open Source"].map((tech) => (
-                <Tag>{tech}</Tag>
-              ))
-            }
-          </div>
-          <a
-            href="https://github.com/LimChaeJune"
-            class="inline-block mt-4 text-blue-400 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer">View Contributions →</a
+          <a class="mb-2" href="https://github.com/toss/use-funnel/pull/116"
+            >toss/use-funnel</a
           >
-        </div>
-      </Section>
-
-      <Section id="education" title="Education & Certifications">
-        <div class="space-y-4">
-          <TimelineItem
-            title="University Name"
-            subtitle="Major | Graduation Year"
-            startDate={new Date("2016-01-01")}
-            endDate={new Date("2020-12-31")}
-          />
-          <TimelineItem
-            title="Another University"
-            subtitle="Computer Science"
-            startDate={new Date("2016-01-01")}
-            endDate={new Date("2020-12-31")}
-          />
-
-          <div class="mt-6">
-            <h3 class="text-xl font-semibold">Certifications</h3>
-            <ul class="list-disc list-inside mt-2">
-              <li>AWS Certified Solutions Architect (2022)</li>
-              <li>Google Cloud Professional Developer (2021)</li>
-              <li>Microsoft Certified: Azure Developer Associate (2020)</li>
-            </ul>
-          </div>
-
-          <div class="mt-6">
-            <h3 class="text-xl font-semibold">Certifications</h3>
-            <ul class="list-disc list-inside mt-2">
-              <li>AWS Certified Solutions Architect (2022)</li>
-              <li>Google Cloud Professional Developer (2021)</li>
-              <li>Microsoft Certified: Azure Developer Associate (2020)</li>
-            </ul>
-          </div>
         </div>
       </Section>
     </div>

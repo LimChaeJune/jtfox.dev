@@ -2,21 +2,51 @@
 interface Props {
   title: string;
   subtitle: string;
+  link?: string;
   description?: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
 }
 
-const { title, subtitle, description, startDate, endDate } = Astro.props;
+const { title, subtitle, description, startDate, endDate, link } = Astro.props;
 ---
 
 <div class="border-l-4 border-gray-300 pl-4">
-  <h3 class="text-xl font-semibold">{title}</h3>
+  <h3 class="text-xl font-semibold">
+    {
+      link ? (
+        <a
+          class="hover:text-blue-500"
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {title}
+        </a>
+      ) : (
+        title
+      )
+    }
+  </h3>
   <p class="text-gray-600 dark:text-gray-400">
     {subtitle}
 
     <span class="ml-2">
-      {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
+      {
+        typeof startDate === "string"
+          ? startDate
+          : startDate.toLocaleDateString("default", {
+              year: "numeric",
+              month: "long",
+            })
+      } - {
+        typeof endDate === "string"
+          ? endDate
+          : endDate.toLocaleDateString("default", {
+              year: "numeric",
+              month: "long",
+            })
+      }
     </span>
   </p>
   {description && <p class="mt-2">{description}</p>}
