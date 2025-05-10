@@ -2,7 +2,7 @@
 import Search from "../components/Search.astro";
 import { FaSolidBars } from "solid-icons/fa";
 
-const pathname = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 const navLinks = [
   { href: "/", text: "Home" },
@@ -25,18 +25,21 @@ const navLinks = [
 
           <div class="hidden md:flex space-x-6">
             {
-              navLinks.map(({ href, text }) => (
-                <a
-                  href={href}
-                  class:list={[
-                    "group flex items-center text-base transition-colors",
-                    { "text-black dark:text-white": pathname === href },
-                    { "text-gray-500 dark:text-gray-400": pathname !== href },
-                  ]}
-                >
-                  <span class="hover-underline">{text}</span>
-                </a>
-              ))
+              navLinks.map(({ href, text }) => {
+                const isActive = currentPath === href;
+                return (
+                  <a
+                    href={href}
+                    class:list={[
+                      "group flex items-center text-base transition-colors",
+                      { "text-black dark:text-white": isActive },
+                      { "text-gray-500 dark:text-gray-400": !isActive },
+                    ]}
+                  >
+                    <span class="hover-underline">{text}</span>
+                  </a>
+                );
+              })
             }
           </div>
         </div>
@@ -67,8 +70,8 @@ const navLinks = [
                 href={href}
                 class:list={[
                   "block py-2 px-4 text-base transition-colors",
-                  { "text-black dark:text-white": pathname === href },
-                  { "text-gray-500 dark:text-gray-400": pathname !== href },
+                  { "text-black dark:text-white": currentPath === href },
+                  { "text-gray-500 dark:text-gray-400": currentPath !== href },
                 ]}
               >
                 <span class="hover-underline">{text}</span>
