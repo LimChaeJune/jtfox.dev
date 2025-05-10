@@ -1,6 +1,6 @@
 ---
 title: "Example Log Post"
-date: 2024-03-19
+date: 2025-05-01
 category: "Daily"
 ---
 
