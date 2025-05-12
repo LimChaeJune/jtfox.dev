@@ -1,0 +1,111 @@
+---
+title: DOM (Document Object Model) 과 브라우저 렌더링
+summary: DOM의 개념과 브라우저 렌더링 과정에 대한 설명
+tags: [Web]
+date: 2022-04-18
+category: [Web]
+---
+
+import { Image } from "astro:assets";
+import myImage from "public/images/blog/2022-04-18/DOM.png";
+
+MDN에서의 정의는 `DOM은 웹 문서용 프로그래밍 인터페이스이다.`  
+그리고 다음 문장이 DOM의 핵심이다.
+`DOM은 문서의 구조화된 표현(structured representation)을 제공하며 프로그래밍 언어가 DOM 구조에 접근할 수 있는 방법을 제공한다.`
+
+쉽게 말해서 우리가 아래 코드처럼 html에 있는 element 객체를 접근해 스타일을 변경하거나 내용을 변경할 수 있게 해주는 역할을 한다.
+
+```javascript
+document.querySelector(".css");
+```
+
+위에 글을 읽으면 이런 생각이 든다 그럼 DOM = HTML인가?
+아니다! HTML은 단순히 텍스트로 구성되어 있고 DOM은 HTML 문서의 내용의 구조가 객체 모델로 변환되어 "노드 트리" 개체 구조로 표현된다.
+아래는 그 예시다.
+
+`HTML`
+
+```html
+<html>
+  <head>
+    <title>타이틀 내용</title>
+  </head>
+  <body>
+    <h1>내용</h1>
+    <h2>내용</h2>
+  </body>
+</html>
+```
+
+`DOM`
+<Image src={myImage} alt="DOM 노드트리" />
+(출처: 나)
+
+## DOM과 HTML
+
+### DOM의 수정
+
+```javascript
+var newitem = document.createElement("div");
+document.body.appendChild(newitem);
+```
+
+위 코드처럼 자바스크립트로 DOM의 새로운 노드를 추가할 수 있다.
+위 코드는 DOM을 업데이트하지만 HTML 문서의 내용을 변경하진 않는다.
+
+### DOM은 렌더링 하지 않는다.
+
+브라우저 뷰 포트에 보이는 것은 렌더 트리이다.
+렌더 트리에선 오직 렌더링 되는 요소만 관련 있기 때문에 시각적으로 보이지 않는 요소는 제외된다.
+
+```javascript
+<div style="display:none"></div>
+```
+
+위와 같은 코드에서 DOM은 `div` 요소를 포함하지만, 렌더 트리에선 포함하지 않는다.
+
+# 브라우저 렌더링
+
+브라우저는 사용자가 선택한 자원을 서버에 요청하고 브라우저에 표시한다.
+
+브라우저가 서버로부터 페이지에 대한 자원을 받으면 화면을 그리기 전에 여러 단계를 거친다.
+
+## 1. DOM 트리 구축을 위한 HTML 파싱
+
+브라우저의 렌더링 엔진에서 HTML 문서를 파싱하고
+DOM 노드로 변환하고, CSS 파일과 함께 스타일 요소 또한 CSSOM으로 변환된다.
+`CSSOM: DOM과 관련된 스타일의 객체 표현 이 또한 노드 형식임`
+
+## 2. 렌더트리 생성
+
+DOM과 CSSOM의 조합이며, 페이지에 최종적으로 렌더링 될 내용을 나타내는 트리이다.
+
+## 4. javascript 실행 (HTML 중간에 스크립트가 있다면 HTML 파싱이 중단된다.)
+
+자바스크립트 파일들이 실행되며 만약 HTML을 파싱 중에 스크립트를 마주하게되면 스크립트를 실행 한 뒤 다시 파싱이 시작된다.
+
+위와 같은 요소들을 `블록 리소스`라고 하는데 블록 리소스는 브라우저 로딩 단계 중 페인트 과정을
+지연시킴으로 스크립트를 임포트하는 위치를 CSS는 `<head>` 태그 내에 js를 실행시키는 `<script>` 태그는 `<body>` 태그의 맨 하단에 위치시키는 것이 좋다.
+
+```html
+<head>
+  <link href="style.css" rel="stylesheet" />
+  <body>
+    <script>
+    <script>
+  </body>
+</head>
+```
+
+## 3. 뷰포트 기반으로 렌더트리의 각 노드가 가지는 위치와 크기를 계산 (Layout/Reflow 단계)
+
+레아이아웃은 뷰포트의 크기를 걸정하는 것으로 표시 영역 크기는 Html의 Head 테그의 정의되는 meta 태그에 의해 결정된다.
+아래는 그 예이다.
+
+```html
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+```
+
+## 4. 계산한 위치/크기를 기반으로 화면에 그림 (Paint 단계)
+
+마지막으로 렌더트리를 이용해 페이지의 UI를 그리게 된다.

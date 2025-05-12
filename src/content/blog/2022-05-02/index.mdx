@@ -1,0 +1,52 @@
+---
+title: Remix로 Solidity 로컬 개발 환경 만들기
+summary: Remix IDE와 로컬 개발 환경을 연결하여 Solidity 개발하기
+tags: [BlockChain, Ethereum, Solidity, Remix]
+date: 2022-05-02
+category: [BlockChain]
+---
+
+import { Image } from "astro:assets";
+import remix from "public/images/blog/2022-05-02/remix.png";
+import remix2 from "public/images/blog/2022-05-02/remix2.png";
+import remix3 from "public/images/blog/2022-05-02/remix3.png";
+import remix4 from "public/images/blog/2022-05-02/remix4.png";
+
+Solidity로 개발을 하다보니 리믹스에서 git을 사용하기 좀 껄끄러운 것도 있고, github로 소스를 관리하다보니 테스트할 때마다 Remix에 매번 복붙해서 배포하는 것도 귀찮아 찾아보니 로컬로 Remix에 WebSoket과 연결해 동기화 해 개발하는 방식이 있더라!
+
+먼저, Solidity 파일이 있는 폴더로 이동해서
+
+`npm으로 remix 설치`
+
+```powershell
+npm install @remix-project/remixd
+```
+
+그 후에 remix를 실행시켜주면 된다.  
+`remix start`
+
+```
+remixd -s . —remix-ide https://remix.ethereum.org
+```
+
+성공했다면 아래 이미지와 같이 터미널에 나타난다.
+
+<Image src={remix} alt="remix" />
+
+아래는 나타나는 웹 소켓에 대한 포트 설명이다.
+
+- 65520 Port - Remix IDE와 파일 시스템 공유하며, Remix IDE에서 Localhost로 로드할 수 있다.
+
+- 65523 Port - slither라는 Contract 세부 정보를 사용자에게 제공하여 경고를 보고 소스를 수정할 수 있게 해주는 플러그인을 활성화하는 포트이다.
+
+그리고 Remix로 이동해서 workspace를 아래 사진과 같이 선택해주면
+
+<Image src={remix2} alt="remix2" />
+
+요렇게 local에 있는 파일들이 Remix로 동기화 된다!
+
+<Image src={remix4} alt="remix4" />
+
+그리고 Deploy 탭으로 가서 확인해보면 아래와 같이 100ether씩 들어간 account가 10개 있다 이 계정들로 deploy해서 테스트를 해볼 수 있다~
+
+<Image src={remix3} alt="remix3" />

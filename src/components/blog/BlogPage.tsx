@@ -5,7 +5,7 @@ import type { CollectionEntry } from "astro:content";
 
 interface BlogPageProps {
   posts: CollectionEntry<"blog">[];
-  allTags: string[];
+  categories: string[];
 }
 
 export default function BlogPage(props: BlogPageProps) {
@@ -13,33 +13,36 @@ export default function BlogPage(props: BlogPageProps) {
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
   );
 
-  const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = createSignal<string[]>(
+    [],
+  );
   const [filteredPosts, setFilteredPosts] = createSignal(sortedPosts);
 
-  const isAllSelected = () => selectedTags().length === props.allTags.length;
+  const isAllSelected = () =>
+    selectedCategories().length === props.categories.length;
 
   const handleTagToggle = (tag: string) => {
     if (tag === "all") {
       if (isAllSelected()) {
-        setSelectedTags([]);
+        setSelectedCategories([]);
       } else {
-        setSelectedTags([...props.allTags]);
+        setSelectedCategories([...props.categories]);
       }
     } else {
-      setSelectedTags((prev) =>
+      setSelectedCategories((prev) =>
         prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
       );
     }
   };
 
   createEffect(() => {
-    const tags = selectedTags();
-    if (tags.length === 0 || isAllSelected()) {
+    const categories = selectedCategories();
+    if (categories.length === 0 || isAllSelected()) {
       setFilteredPosts(sortedPosts);
     } else {
       setFilteredPosts(
         sortedPosts.filter((post) =>
-          tags.every((tag) => post.data.tags.includes(tag)),
+          categories.some((category) => post.data.category.includes(category)),
         ),
       );
     }
@@ -49,8 +52,8 @@ export default function BlogPage(props: BlogPageProps) {
     <div class="flex flex-col md:flex-row gap-6">
       <aside class="hidden md:block w-64 shrink-0">
         <FilterTagList
-          tags={props.allTags}
-          selectedTagsSignal={selectedTags}
+          tags={props.categories}
+          selectedTagsSignal={selectedCategories}
           isAllSelectedSignal={isAllSelected}
           onTagToggle={handleTagToggle}
         />
@@ -58,8 +61,8 @@ export default function BlogPage(props: BlogPageProps) {
       <main class="flex-1">
         <BlogList
           initialPosts={filteredPosts()}
-          allTags={props.allTags}
-          selectedTagsSignal={selectedTags}
+          allTags={props.categories}
+          selectedTagsSignal={selectedCategories}
           isAllSelectedSignal={isAllSelected}
           onTagToggle={handleTagToggle}
         />

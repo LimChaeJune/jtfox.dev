@@ -1,0 +1,294 @@
+---
+title: WebPack 그리고 babel
+summary: 웹팩과 바벨의 개념 및 사용법에 대한 기본 설명
+tags: [Web, webpack, babel]
+date: 2022-04-14
+category: [Web]
+---
+
+import { Image } from "astro:assets";
+import webpack from "public/images/blog/2022-04-14/webpack.png";
+
+React로 개발을 하다보면, Webpack 그리고 babel이란 단어를 심심치 않게 접하게 된다. 오늘은 Webpack과 babel의 개념에 대해서 알아보려고 한다.
+
+## 웹팩 등장 전
+
+아래와 같이 script를 바디에서 호출하는 식으로 사용했다.
+이런 경우 문제점은 전역 스코프가 오염되어 예측할 수 없게 된다.
+
+```js
+  <script type="module" src="src/math.js"></script>
+  <script type="module" src="src/app.js"></script>
+```
+
+## 모듈 스팩
+
+### CommonJS
+
+`CommonJS`는 자바스크립트를 사용하는 모든 환경에서 모듈을 하는 것이 목표로 export 키워드로 모듈을 만들고 require()함수로 불러 들이는 방식이다. NodeJs에서 이를 사용한다.
+
+`math.js`:
+
+```
+exports function sum(a, b) {return a+b; }
+```
+
+`app.js`:
+
+```
+const sum = require('./math.js');
+sum(1, 2); //3
+```
+
+### AMD
+
+브라우저 처럼 비동기로 로딩되는 환경에서 모듈을 사용하는 목표이다.
+
+### UMD
+
+AMD기반으로 CommonJS 방식까지 지원하는 통합 형태이며, React나 바벨 웹팩을 이용했다면 친숙할 수 있는 형태이다.
+
+`math.js`:
+
+```
+export function sum(a, b) {return a+b; }
+```
+
+`app.js`:
+
+```
+import * as math from './math.js'
+math.sum(1, 2); //3
+```
+
+## WebPack
+
+---
+
+Webpack 공식 Document의 정의는 `JavaScript 애플리케이션을 위한 정적 모듈 번들러` 으로 표기되어 있다.
+
+여기서 말하는 정적 모듈 번들러가 뭘까?
+먼저 여기서 말하는 모듈은 우리가 npm, yarn등으로 생성하는 node_modules와 Javascript, 이미지, Css 등을 패키징하여 재사용 가능하게 만드는 코드 덩어리이다. 그리고 번들링은 저 모듈들을 하나의 파일로 묶게 되는 것이다.
+
+<Image src={webpack} alt="webpack" />
+출처: https://webpack.js.org/
+
+### webpack의 장점
+
+1. 성능 최적화
+   이렇게 모듈을 번들링하여 묶어서 얻는 장점이 무엇일까? 우리가 웹 페이지를 요청할 때 html, css, js 파일 등의 여러가지 파일을 요청하게 된다 이러한 요청을 WebPack을 이용해 요청의 수를 획기적으로 줄일 수 있다! 그러면 자원이나 성능에서 이점을 가져갈 수 있게 된다.
+
+2. 브라우저의 모듈 지원
+   위에 설명한 UMD이나 CommonJS를 지원하지 않는 브라우저도 있기 때문에 브라우저 무관하게 모듈을 사용할 때 웹팩을 이용해 사용할 수 있다.
+
+### entry/output (엔트리/아웃풋)
+
+`entry`: 모듈의 시작점을 지정한다. (모든 의존성이 시작되는 부분)
+`output`: 번들링이 진행되고, 코드가 저장될 위치
+
+### loader (로더)
+
+웹팩에선 모든 파일을 모듈로 바라본다. 자바스크립트 뿐만 아니라 스타일시트, 이미지, 폰트까지도 모두 import 구문을 사용해 자바스크립트 코드 안으로 가져올 수 있다.
+
+이것을 가능하게 해주는 것이 웹팩의 로더 이다. 로더는 타입 스크립트 같은 다른 언어를 자바스크립트 문법으로 변호나해 주거나 이미지를 data URL 형식의 문자열로 변환시킨다.
+
+**자주 사용되는 로더**
+
+- `css-loader`: css를 js로 변환하기 위한 로더
+
+- `style-loader`: js로 처리된 css코드를 html에 주입시키는 역할을 하는 로더
+
+- `file-loader`: 이미지 파일을 모듈 파일로 사용할 수 있게 하는 로더
+
+- `url-loader`: 이미지 파일을 dataUrl 형식으로 변환시키는 로더
+
+### plugin (플러그인)
+
+플러그인은 로더가 파일 단위로 처리하는 반면 플러그인은 번들링된 결과물을 처리한다.
+
+**자주 사용되는 플러그인**
+
+- `BannerPlugin`: 빌드 시간, 정보, 버전 등을 맨 상단에 배너 형식으로 넣기 위한 용도
+
+- `DefinePlugin`: 환경 의존적인 정보들을 관리하기 위한 플러그인
+
+- `HtmlTemplatePlugin`: HTML의 파일을 빌드에 포함시킬 때 사용하는 플러그인
+
+- `clean-webpack-plugin`: 빌드 시마다 기존의 output 폴더를 삭제하고 다시 생성해주는 플러그인
+
+- `MiniCssExtractPlugin`: 스타일 코드만 뽑아서 별도의 CSS 파일로 만들어 파일을 분리하게 할 수 있다.
+
+## webpack 설정해보기
+
+### webpack-cli install / start
+
+webpack과 cli 명령어로 실행할 수 있게 해주는
+webpack-cli을 함께 설치해준다.
+
+```powershell
+npm install -D webpack webpack-cli
+```
+
+`webpack`을 실행하기 위해서는 필수적으로 3가지의 옵션을 설정해야한다.
+
+- `mode`: "development", "production", "none" 세 가지가 있으며 실행하는 환경에 따라 지정해주면 된다.
+- `entry`: 모듈의 시작점
+- `output-path`: 번들링 된 파일이 만들어지는 위치
+
+아래와 같이 실행하게되면 `dist`폴더에 main.js라는 번들링 된 파일이 생기게 된다.
+
+```powershell
+node_modules/.bin/webpack --mode development --entry ./src/app.js --output-path dist/main.js
+```
+
+번들링한 파일을 html 파일에서 로드해서 사용하면 된다. (type 지정하지 않아도 됨)
+
+`index.html`:
+
+```html
+<body>
+  <script src="dist/main.js"></script>
+</body>
+```
+
+### webpack.config.js
+
+매번 cli로 옵션을 설정하기 힘드니 webpack.config.js 파일을 생성 해 관리해주면 된다.
+
+먼저 아래와 같이 package.json 파일에 script를 만들어주고
+
+`package.json`:
+
+```json
+  "build": "webpack"
+```
+
+웹팽 파일 설정은 아래와 같이 해준다.
+
+`webpack.config.js`:
+
+```js
+const path = require("path");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve("./dist"),
+    // 여러개의 entry를 지정했을 때 동적으로 이름을 할당
+    filename: "[name].js",
+  },
+};
+```
+
+## babel
+
+WebPack을 이용할 때 babel의 개념에 대해 알아 둘 필요가 있다.
+
+ES6 클래스와 IMPORT문은 모든 브라우저에서 적용되진 않는다. 모든 브라우저에서 코드를 읽을 수 있도록 하려면 ES6의 기능을 ES5코드로 변환시켜주는 트랜스 파일링(작성한 코드를 다른 언어로 변환)이 필요하다.
+
+바벨은 세 단계로 빌드를 진행한다.
+
+1. Parsing - 코드를 토큰으로 하나씩 분해하여 추상 구문 트리(AST)로 변환한다..
+2. Transforming - ES6 -> ES5로 변환
+3. Printing - 변경된 결과를 결과 출력
+
+그리고 바벨은 보통 두 가지로 설정을 하게되는데 plugin과 preset이다.
+
+### plugins
+
+플러그인을 코드를 ES6을 ES5로 변경해주는 코드인데 예를들어
+아래와 같이 ES5에서 지원하지 않는 arrow function을 ES5로 바꾸기 위해 `@babel/plugin-transform-arrow-functions` 플러그인을 설치해 설정파일에 넣어주면 된다.
+
+```js
+// ES6
+const sum = (a, b) => {
+  return a + b;
+};
+
+// ES5
+var sum = function (a, b) {
+  return a + b;
+};
+```
+
+### preset
+
+위에서처럼 플러그인을 하나 하나 넣기에는 무리가 있기 때문에 플러그인을 모아서 사용하는 경우가 바로 `preset`이다.
+
+### polyfill
+
+지원하지 않은 웹 브라우저 상의 기능을 구현하는 코드
+
+(ES6 - Map, Promise 등)을 사용가능하게 구현이 누락된 새로운 기능을 메꿔주는 역할
+
+쉽게말해서 ES6 에서 ES5로 변환되지 않는 것들을 추가적인 코드조각을 추가해서 해결하는 것이다.
+
+대표적인 env preset에선 아래와 같이 설정할 수 있다.
+`corejs`라는 polyfill을 사용한 것이다.
+
+`babel.config.js`:
+
+```js
+module.exports = {
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          chrome: "79",
+          ie: "11",
+        },
+        useBuiltIns: "usage",
+        corejs: {
+          version: 2,
+        },
+      },
+    ],
+  ],
+};
+```
+
+### WebPack 과 babel
+
+WebPack이 모듈을 번들링할 때 Babel을 사용하여 트랜스 파일링 시킬 수 있다.
+
+웹펙에선 babel을 loader로 사용된다.
+
+1. 바벨 로더 / core-js 설치
+
+```ps
+npm i babel-loader core-js@2
+```
+
+2. 웹펙 파일 설정
+
+사용법은 굉장히 간단한데 설치한 로더를 다른 로더 사용하듯이 추가해주면 된다.
+
+exclude는 자바스크립트가 불러오는 node_module 내에 모듈까지도 바벨이 적용되지 않도록 방지하는 것이다.
+
+`webpack.config.js`:
+
+```js
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./app.js",
+  },
+  output: {
+    path: path.resolve("./dist"),
+    filename: "[name].js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: "babel-loader",
+        exclude: /node_modules/,
+      },
+    ],
+  },
+};
+```

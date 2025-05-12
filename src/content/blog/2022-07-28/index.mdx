@@ -1,0 +1,85 @@
+---
+title: 프론트 엔드에서의 렌더링 최적화
+summary: 웹 애플리케이션의 렌더링 성능을 향상시키는 다양한 최적화 기법
+tags: [Web, 렌더링 최적화, 최적화, 성능]
+date: 2022-07-28
+category: [Web]
+---
+
+import { Image } from "astro:assets";
+import sprite from "public/images/blog/2022-07-28/sprite.png";
+
+## 1. 트리쉐이킹
+
+[NextJs 웹 어플리케이션 최적화 (트리셰이킹)](/blog/2022-07-04/) 포스팅에서 설명처럼 사용하지 않는 모듈들을 제거하여 `실제로 사용하는 모듈`만을 남겨 파일의 크기를 줄이는 방식이다.
+
+## 2. 블록 리소스 최적하
+
+[DOM (Document Object Model) 과 브라우저 렌더링](/blog/2022-04-18/) 이 포스팅에서 설명했듯이 HTML 파싱을 차단하는 블록 리소스를 태그의 위치를 적절히 설정하여 최적하 하는 방법이다.
+페인팅을 빠르게 하고 로딩 속도를 개선할 수 있다.
+
+## 3. 이미지 스프라이트 / 지연로딩
+
+### 이미지 스프라이트
+
+이미지 스프라이트는 여러 개의 이미지를 하나로 합쳐서 관리하는 기법이다.
+이미지가 많을 경우 웹 브라우저는 서버에 해당 이미지의 수만큼 요청해야만 하기 때문에 웹 페이지의 로딩 시간이 오래 걸릴 수 밖에 없다.
+
+<Image src={sprite} alt="sprite" />
+
+그래서 위와 같이 한 이미지에 여러 이미지를 배치하고, 포지션별로 이미지를 구분해 한번의 로딩만으로 여러 이미지를 사용하는 기법이다.
+
+### 이미지 지연로딩 (Lazy Loading)
+
+여러 이미지가 보이는 페이지에서, 사용자 화면에 보이는 이미지만을 로드하고, 아직 보지 못하는 이미지(스크롤 되지 않은 이미지)들은 바로 요청하지 않는 기법
+
+## 4. 강제 동기 레이아웃 및 스래싱 피하기
+
+### 강제 동기 레이아웃 지양하기
+
+일반적으로 javascript가 실행된 다음 스타일 계산, 레이아웃이 실행된다. 그러나 javascript를 사용해 브라우저가 레이아웃을 더 일찍 수행할 수 있도록 할 수 있다.
+
+스타일을 변경한 후 offsetHeight, offsetTop과 같은 계산된 값을 속성으로 읽으면 강제로 동기 레이아웃이 실행된다.
+
+```js
+// not good
+function getBoxHeight() {
+  box.classList.add("getbox");
+
+  console.log(box.offsetHeight);
+}
+
+// good
+function getBoxHeight() {
+  console.log(box.offsetHeight);
+
+  box.classList.add("getbox");
+}
+```
+
+위와 같은 경우 높이 가져오기 위해 레이아웃을 실행한 후 가져와야 한다. 이거는 불필요하고 잠재적으로 비용이 많이 드는 작업이다. 항상 스타일을 읽는 것을 일괄 처리한 후에 수행해야 한다.
+
+### 레이아웃 스래싱
+
+많은 레이아웃을 연속적으로 빠르게 수행하는 것을 레이아웃 스래싱이라고 한다.
+
+```js
+function resizeAllParagraphsToMatchBlockWidth() {
+  for (var i = 0; i < paragraphs.length; i++) {
+    paragraphs[i].style.width = box.offsetWidth + "px";
+  }
+}
+```
+
+위에 소스는 루프의 각 반복에서 스타일 값을 읽고 너비를 업데이트하게 되면 매번 다음 반복에서 전에 요청된 스타일로 변경되어야 하기 때문에 레이아웃에 계속되서 실행된다.
+
+```js
+let width = box.offsetWidth;
+function resizeAllParagraphsToMatchBlockWidth() {
+  for (var i = 0; i < paragraphs.length; i++) {
+    paragraphs[i].style.width = width + "px";
+  }
+}
+```
+
+위에 소스처럼 한번의 값을 읽어 변수에 할당하여 사용하는 것이 좋다.

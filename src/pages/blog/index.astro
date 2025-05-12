@@ -4,10 +4,11 @@ import BlogPage from "@/components/blog/BlogPage";
 import { getAllBlogPosts } from "@/app/api/blog";
 
 const posts = await getAllBlogPosts();
-
-const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+const categories = [
+  ...new Set(posts.flatMap((post) => post.data.category)),
+].sort();
 ---
 
 <Layout>
-  <BlogPage posts={posts} allTags={allTags} client:load />
+  <BlogPage posts={posts} categories={categories} client:load />
 </Layout>

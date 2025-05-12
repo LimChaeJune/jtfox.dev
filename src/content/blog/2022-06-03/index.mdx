@@ -1,0 +1,46 @@
+---
+title: IPFS
+summary: 분산 파일 시스템 IPFS의 개념과 특징에 대한 이해
+tags: [BlockChain, IPFS, Web3]
+date: 2022-06-03
+image: /images/blog/2022-06-03/ipfs.jpeg
+category: [BlockChain]
+---
+
+import { Image } from "astro:assets";
+import ipfs from "public/images/blog/2022-06-03/ipfs.jpeg";
+
+# 여담
+
+BlockReview라는 프로젝트를 진행하면서 리뷰를 NFT화 하는 Contract를 만들었는데 NFT를 저장할 때 통상 IPFS라는 시스템에 저장하게 되더라 일반 URL 저장과 무엇이 다른지 한 번 정리해보려고한다.
+
+# IPFS
+
+공식 문서에서는 `IPFS는 파일, 웹 사이트, 응용 프로그램 및 데이터를 저장하고 액세스 하기 위한 분산 시스템`이란다.
+
+먼저 IPFS의 특징을 알아보자,
+
+1. P2P 분산 파일 시스템 (탈중앙화)
+2. IPFS 노드에 참여하게되면 FileCoin이란 인센티브를 제공한다.
+3. HTTP는 URL을 통해 접근하지만, IPFS는 내용으로 접근하게된다.
+
+## P2P 분산 파일 시스템 (탈 중앙화)
+
+예를 들어, [Aard](https://en.wikipedia.org/wiki/Aardvark)를 위키피디아 주소로 접근할 수 있다.
+이것을 ipfs를 통해 접근하게되면, [IPFS](https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Aardvark.html)로 접근하게되면, 전 세계 IPFS 노드에게 요청을하여 페이지를 공유한다.
+
+이러한 방식을 가져가며 얻는 이익은 아래와 같다.
+
+- `서버가 공격을 받거나, 서버에 이상이 생겨도` 다른 곳에서 동일한 웹 페이지를 얻을 수 있게 된다.
+
+- `콘텐츠를 검열하기 쉽지 않다.` IPFS의 파일은 요청을 받는 곳을 예상하기 힘들기 때문에 행동을 제약하기 쉽지않다. 토렌트와 같은 불법 다운로드도 위와 같은 이유로 잡아내기 쉽지 않다.
+
+- `서버가 굉장히 멀리있어도, 가까이 있는 노드가 있다면 속도를 높여 빨리 가져올 수 있다`. 요즘은 이것을 일반 서비스에선 CDN으로 해결한다
+
+## 인센티브 (FileCoin)
+
+IFPS의 클라이언트는 특정 수준의 중복성 및 가용성으로 데이터를 저장하기 위해 비용을 지불하고, 스토리지 제공자는 데이터를 지속적으로 저장하고, 마치 비트코인의 pow 처럼 데이터에 대한 증명을 함으로써 FileCoin을 얻게된다.
+
+## 콘텐츠 주소 지장
+
+IPFS는 HTTP 계층에서 `콘텐츠 주소 지정`을 사용한다. 파일의 내용을 가져와서 암호화 해시를 적용해 주소를 만들게 된다 그래서 `https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Aardvark.html` 같은 형태의 주소가 만들어진다.

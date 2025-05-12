@@ -1,0 +1,165 @@
+---
+title: NextJs 웹 어플리케이션 최적화 (트리셰이킹)
+summary: 트리셰이킹을 통한 NextJS 웹 애플리케이션의 번들 사이즈 최적화 방법
+tags: [Web, NextJS, Webpack, TreeShaking, 최적화]
+date: 2022-07-04
+category: [Web]
+---
+
+import { Image } from "astro:assets";
+import treeshaking1 from "public/images/blog/2022-07-04/treeshaking1.png";
+import treeshaking2 from "public/images/blog/2022-07-04/treeshaking2.png";
+import treeshaking3 from "public/images/blog/2022-07-04/treeshaking3.png";
+import treeshaking4 from "public/images/blog/2022-07-04/treeshaking4.png";
+
+# Tree Shaking
+
+Tree Shaking은 `실제로 사용하는 모듈`만 로딩하게 하여 번들의 사이즈를 줄여
+`빌드 시간`과 `렌더링 시간`감소를 기대할 수 있다.
+
+## bundle-analyzer을 통해 번들 크기 시각화
+
+- `@next/bundle/analyzer`
+
+NextJs에선 위의 패키지를 통해 빌드 프로세스에서 번들링 된 패키지 크기를 시각화 하여 볼 수 있다.
+
+- `webpack-bundle-analyzer`
+
+NextJS가 아닌 Webpack을 집적 구성해 프로젝트를 빌드할 때는 위의 패키지를 사용해 동일한 결과를 가질 수 있다.
+
+## 번들 사이즈 측정
+
+먼저 `@next/bundle-analyzer`를 사용하기 위해서는 `next.config.js` 파일에 bundle analyzer를 intergrate 해주어야 한다.
+
+`nextconfig.js`
+
+```js
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true"
+});
+
+module.exports = withBundleAnalyzer(nextConfig);
+```
+
+실행은 아래와 같이 package.json 파일에 스크립트로 설정하거나 .env 파일로 설정하여 실행하면 된다.
+`package.json`
+
+```json
+"analyze" : "cross-env ANALYZE=true next build"
+```
+
+위와 같이 실행 후에는 빌드 결과물의 .next 폴더 아래에 analyze 폴더에서 확인할 수 있다.
+<Image src={treeshaking4} alt="bundle" />
+
+그리고 해당 파일을 누르면 아래와 같은 결과들을 확인할 수 있다.
+
+<Image src={treeshaking2} alt="bundle" />
+<Image src={treeshaking1} alt="bundle" />
+
+> 사이즈를 표시하는 속성으로 stat과 parsed, Gzipped을 확인할 수 있다. stat은 축소와 같은 변환 이전의 파일의 '입력'크기 이고,
+> parsed는 파일의 '출력' 크기 이며, Webpack이 트리셰이킹을 마친 상태의 크기다. gzip은 압축을 통해 구문 분석된 번들/모듈을 실행하는 크기이다. 우리는 `parsed size`만을 보면된다.
+
+## 작업 진행
+
+가장 큰 번들의 크기가 `aws-sdk`의 `2.69MB`이다.  
+S3를 사용하기 위한 모듈이였는데 EC2, utils 등의 여러 모듈도 함께 빌드되어 가장 큰 용량을 차지하는 것으로 보인다.
+`각자 사용하는 모듈이 다르고 모듈마다 트리셰이킹 방식도 다르기 때문에 이번 포스팅에선 가장 큰 패키지 하나만 진행하려고한다.`
+
+`변경 전`
+
+```js
+import { config, S3 } from "aws-sdk";
+
+const region = "ap-northeast-2";
+const bucket = "blockjobsawsbucket";
+
+config.update({
+  region: region,
+  accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_ID,
+  secretAccessKey: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY
+});
+
+const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+
+  const upload = new S3.ManagedUpload({
+    params: {
+      Bucket: bucket, // 버킷 이름
+      Key: id + ".png", // 유저 아이디 혹은 enterpriseid
+      Body: file // 파일 객체
+    }
+  });
+
+  const promise = upload.promise();
+  promise.then(
+    function () {
+      // 종료를 상위 컴포넌트에 callback
+      uploadComplete();
+    },
+    function (err) {
+      // 이미지 업로드 실패
+      console.log(err);
+    }
+  );
+};
+```
+
+> `aws-sdk` 패키지를 제거한 후 S3 업로드에 필요한 `@aws-sdk/client-s3` `@aws-sdk/lib-storage` 패키지를 다운받아
+> 해당 패키지에 맞게 코드를 수정했다.
+
+`변경 후`
+
+```js
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+
+export const useS3 = () => {
+  const region = "ap-northeast-2";
+  const bucket = "blockjobsawsbucket";
+  const fileBaseUrl = `https://${bucket}.s3.${region}.amazonaws.com/`;
+
+  const handleFileInput = async ({
+    id,
+    uploadComplete,
+    e
+  }: ProfileUpload_props) => {
+    const file = e.target.files?.[0];
+
+    const s3 = new S3Client({
+      region: region,
+      credentials: {
+        accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_ID ?? "",
+        secretAccessKey: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY ?? ""
+      }
+    });
+
+    try {
+      const mulitpartUpload = new Upload({
+        client: s3,
+        params: {
+          Bucket: bucket, // 버킷 이름
+          Key: id + ".png", // 유저 아이디 혹은 enterpriseid
+          Body: file // 파일 객체
+        }
+      });
+
+      await mulitpartUpload.done();
+      await uploadComplete(id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return { handleFileInput, fileBaseUrl };
+};
+```
+
+## 작업 결과
+
+위와같이 작업을 진행한 결과
+
+- Parsed Szie: `2.69MB` -> `373.61KB` (-86%)
+
+<Image src={treeshaking3} alt="bundle" />
+
+사실 위와 같은 결과는 나오기 쉽지 않고 (사실 나오면 안된다. 큰 모듈을 통째로 사용하는 것을 지양해야 한다.) 10% ~ 20%의 감소정도를 기대해 볼 수 있는 것 같다. (실무 프로젝트에서도 최대가 15% 정도 였다...)

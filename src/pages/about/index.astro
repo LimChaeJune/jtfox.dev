@@ -5,7 +5,6 @@ import { getCollection } from "astro:content";
 import Section from "@/components/about/Section.astro";
 import TimelineItem from "@/components/about/TimelineItem.astro";
 import ProjectList from "@/components/project/ProjectList.astro";
-import { Tag } from "@/components/common/Tag";
 
 const records = await getCollection("projects");
 ---
@@ -64,7 +63,9 @@ const records = await getCollection("projects");
       <Section id="github" title="Presentation">
         <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
           <h3 class="text-xl font-semibold mb-3">GitHub Contributions</h3>
-          <a class="mb-2" href="https://github.com/toss/use-funnel/pull/116"
+          <a
+            class="mb-2 hover:text-blue-500"
+            href="https://github.com/toss/use-funnel/pull/116"
             >toss/use-funnel</a
           >
         </div>
