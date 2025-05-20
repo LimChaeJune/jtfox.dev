@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "@/app/layouts/Layout.astro";
 import Animation from "@/app/components/Animation.astro";
 import Footer from "@/app/components/Footer.astro";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -43,6 +44,20 @@ const { Content } = await project.render();
   <div class="max-w-3xl mx-auto">
     <Animation>
       <header class="mb-8">
+        {
+          project.data.image && (
+            <div class="w-full h-64 relative mb-4">
+              <Image
+                src={project.data.image}
+                alt={project.data.title}
+                width={1000}
+                height={1000}
+                class="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          )
+        }
+
         <h1 class="text-3xl font-bold text-slate-700 dark:text-slate-200">
           {project.data.title}
         </h1>
@@ -60,18 +75,16 @@ const { Content } = await project.render();
             }
           </time>
         </div>
-        {
-          project.data.domain && (
-            <a
-              href={project.data.domain}
-              class="dark:text-blue-400 mt-2 inline-block"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {project.data.domain}
-            </a>
-          )
-        }
+
+        <div class="flex flex-wrap gap-2 mt-2">
+          {
+            project.data.technologies.map((technology) => (
+              <span class="inline-block bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md text-sm">
+                {technology}
+              </span>
+            ))
+          }
+        </div>
       </header>
     </Animation>
     <Animation delay={0.2}>

@@ -3,8 +3,8 @@ title: "Saige Vision V2"
 company: "Saige"
 startDate: "2024-01-15"
 domain: "AI"
-summary: "AI VISION 솔루션인 Saige Vision의 차세대 버전인 V2 개발에 참여했어요."
-image: "/images/projects/saigeision.jpg"
+summary: "AI VISION 솔루션인 Saige Vision의 차세대 버전인 V2 개발에 참여했습니다."
+image: "/images/projects/saigevision.png"
 technologies: [React, Electron, TypeScript, Xstate, Vite, Emotion, Storybook]
 link: "https://saige.ai/kr/solutions/vision"
 ---

@@ -6,7 +6,7 @@ endDate: "2022-06-20"
 domain: "Recruit"
 summary: "블록체인으로 투명하게 경력을 증명하고, 믿을 수 있는 리뷰를 만드는 플랫폼을 개발했어요."
 image: "/images/projects/blockreview.png"
-technologies: ["React", "Typescript", "Recoil", "Mui"]
+technologies: ["React", "Typescript", "Recoil", "Mui", "ERC-20", "Solidty"]
 ---
 
 프리랜서로 활동하면서 **경력증빙** 과정에서 느끼는 어려움과 불편함을 해결하고 싶었어요. 그래서 블록체인이 가진 탈중앙성과 불변성이라는 매력적인 특성을 활용해 이 프로젝트를 기획하고 개발하게 되었어요.

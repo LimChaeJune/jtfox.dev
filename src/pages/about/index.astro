@@ -11,38 +11,41 @@ const records = await getCollection("projects");
 
 <Layout description="저의 경력, 프로젝트 경험, 그리고 기술 스택을 소개합니다.">
   <Animation>
-    <div class="space-y-12">
-      <Section id="experience" title="Experience">
-        <div class="space-y-4">
-          <TimelineItem
-            title="Saige"
-            link="https://saige.ai"
-            subtitle="Frontend Developer"
-            startDate={new Date("2022-08-14")}
-            endDate={"Present"}
-            description="AI VISION 솔루션인 Saige Vision의 차세대 버전인 V2 Frontend Part Maintainer로 근무하고 있습니다."
-          />
-        </div>
-        <div class="mt-6 border-t pt-4">
-          <h3 class="text-xl font-semibold mb-3">Freelance</h3>
-          <TimelineItem
-            title="KT DS"
-            link="https://www.ktds.com"
-            subtitle="Frontend Developer"
-            startDate={new Date("2020-09-01")}
-            endDate={new Date("2022-03-01")}
-            description="DS의 메타버스 신사업에 참여하여 FrontEnd 개발자로 근무하였습니다."
-          />
-          <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
-          <TimelineItem
-            title="평화이즈"
-            link="https://www.phis.co.kr"
-            subtitle="Desktop Application Developer"
-            startDate={new Date("2020-02-01")}
-            endDate={new Date("2020-08-01")}
-            description="의료 진료관리 시스템의 데이터 시각화 파트를 담당하여 개발하였습니다."
-          />
-        </div>
+    <div class="space-y-12 flex">
+      <div class="flex flex-col gap-8">
+        <Section id="work" title="Work Experience">
+          <div class="space-y-4">
+            <TimelineItem
+              title="Saige"
+              link="https://saige.ai"
+              subtitle="Frontend Developer"
+              startDate={new Date("2022-08-14")}
+              endDate={"Present"}
+              description="AI VISION 솔루션인 Saige Vision의 차세대 버전인 V2 Frontend Part Maintainer로 근무하고 있습니다."
+            />
+          </div>
+          <div class="mt-6 border-t pt-4">
+            <h3 class="text-xl font-semibold mb-3 text-gray-400">Freelance</h3>
+            <TimelineItem
+              title="KT DS"
+              link="https://www.ktds.com"
+              subtitle="Frontend Developer"
+              startDate={new Date("2020-09-01")}
+              endDate={new Date("2022-03-01")}
+              description="DS의 메타버스 신사업에 참여하여 FrontEnd 개발자로 근무하였습니다."
+            />
+            <div class="my-4 border-t border-gray-200 dark:border-gray-700">
+            </div>
+            <TimelineItem
+              title="평화이즈"
+              link="https://www.phis.co.kr"
+              subtitle="Desktop Application Developer"
+              startDate={new Date("2020-02-01")}
+              endDate={new Date("2020-08-01")}
+              description="의료 진료관리 시스템의 Desktop Application 데이터 시각화 파트를 담당하여 개발했습니다."
+            />
+          </div>
+        </Section>
 
         <Section id="projects" title="Projects">
           <ProjectList projects={records} />
@@ -58,7 +61,7 @@ const records = await getCollection("projects");
             >
           </div>
         </Section>
-      </Section>
+      </div>
     </div>
   </Animation>
 </Layout>

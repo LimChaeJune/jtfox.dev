@@ -35,6 +35,7 @@ const projects = defineCollection({
     image: z.string().optional(),
     technologies: z.array(z.string()),
     link: z.string().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
