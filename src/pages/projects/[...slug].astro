@@ -4,6 +4,7 @@ import Layout from "@/app/layouts/Layout.astro";
 import Animation from "@/app/components/Animation.astro";
 import Footer from "@/app/components/Footer.astro";
 import { Image } from "astro:assets";
+import { TitleImageBox } from "@/components/common/TitleImageBox";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -45,22 +46,18 @@ const { Content } = await project.render();
     <Animation>
       <header class="mb-8">
         {
-          project.data.image && (
-            <div class="w-full h-64 relative mb-4">
-              <Image
-                src={project.data.image}
-                alt={project.data.title}
-                width={1000}
-                height={1000}
-                class="w-full h-full object-cover rounded-lg"
-              />
-            </div>
+          project.data.image ? (
+            <TitleImageBox
+              src={project.data.image}
+              title={project.data.title}
+            />
+          ) : (
+            <h1 class="text-2xl font-bold mb-8 text-gray-800 dark:text-white">
+              {project.data.title}
+            </h1>
           )
         }
 
-        <h1 class="text-3xl font-bold text-slate-700 dark:text-slate-200">
-          {project.data.title}
-        </h1>
         <div class="flex gap-4 mt-4">
           <span class="text-slate-500 dark:text-slate-400">
             {project.data.company}
