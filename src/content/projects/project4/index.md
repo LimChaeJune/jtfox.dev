@@ -4,7 +4,7 @@ company: "KT DS"
 startDate: "2021-06-01"
 endDate: "2022-01-31"
 domain: "Education"
-summary: "ELIFUN 신규개발 참여해 WebView 화면과 CMS 페이지를 개발했습니다."
+summary: "ELIFUN 신규개발 참여해 WebView 화면과 CMS 페이지를 개발했어요요."
 image: "/images/projects/elifun.png"
 technologies: ["React", "Typescript", "Recoil", "MUI"]
 draft: true
