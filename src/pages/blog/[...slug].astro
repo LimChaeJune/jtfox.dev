@@ -80,6 +80,6 @@ const tags = post.data.tags || [];
       <Footer prevPost={post.prev} nextPost={post.next} postType="blog" />
     </Animation>
 
-    <PostComments />
+    <PostComments key={post.slug} />
   </main>
 </Layout>
