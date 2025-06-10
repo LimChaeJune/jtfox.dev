@@ -51,35 +51,33 @@ const tags = post.data.tags || [];
 ---
 
 <Layout description={post.data.summary || `${post.data.title} | jtfox.dev`}>
-  <main class="max-w-3xl mx-auto px-4 pt-12">
-    <Animation>
-      {
-        post.data.image ? (
-          <TitleImageBox src={post.data.image} title={post.data.title} />
-        ) : (
-          <h1 class="text-2xl font-bold mb-8 text-gray-800 dark:text-white">
-            {post.data.title}
-          </h1>
-        )
-      }
-      <div class="flex items-center justify-between mb-4">
-        <p class="text-md text-gray-400">
-          {estimatedReadTimeText}
-        </p>
-        <div class="flex flex-wrap gap-2 max-w-[70%]">
-          {tags.map((tag) => <Tag>{tag}</Tag>)}
-        </div>
+  <Animation>
+    {
+      post.data.image ? (
+        <TitleImageBox src={post.data.image} title={post.data.title} />
+      ) : (
+        <h1 class="text-2xl font-bold mb-8 text-gray-800 dark:text-white">
+          {post.data.title}
+        </h1>
+      )
+    }
+    <div class="flex items-center justify-between mb-4">
+      <p class="text-md text-gray-400">
+        {estimatedReadTimeText}
+      </p>
+      <div class="flex flex-wrap gap-2 max-w-[70%]">
+        {tags.map((tag) => <Tag>{tag}</Tag>)}
       </div>
-    </Animation>
-    <Animation delay={0.2}>
-      <article>
-        <Content />
-      </article>
-    </Animation>
-    <Animation delay={0.3}>
-      <Footer prevPost={post.prev} nextPost={post.next} postType="blog" />
-    </Animation>
+    </div>
+  </Animation>
+  <Animation delay={0.2}>
+    <article>
+      <Content />
+    </article>
+  </Animation>
+  <Animation delay={0.3}>
+    <Footer prevPost={post.prev} nextPost={post.next} postType="blog" />
+  </Animation>
 
-    <PostComments key={post.slug} />
-  </main>
+  <PostComments key={post.slug} />
 </Layout>
