@@ -13,13 +13,15 @@ export default function LogList(props: Props) {
 
   createEffect(() => {
     const category = selectedCategory();
+    const sortedLogs = [...props.initialLogs].sort(
+      (a, b) =>
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+    );
     if (category === "all") {
-      setFilteredLogs(props.initialLogs);
+      setFilteredLogs(sortedLogs);
       return;
     }
-    const filtered = props.initialLogs.filter(
-      (log) => log.data.category === category,
-    );
+    const filtered = sortedLogs.filter((log) => log.data.category === category);
     setFilteredLogs(filtered);
   });
 
