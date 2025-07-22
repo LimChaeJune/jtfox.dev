@@ -4,7 +4,7 @@ company: "KT DS"
 startDate: "2021-06-01"
 endDate: "2022-01-31"
 domain: "Education"
-summary: "ELIFUN 교육 플랫폼 신규 개발에 참여하여, WebView 기반 프론트엔드 화면과 ASP.NET 백엔드 API를 구축했어요."
+summary: "ELIFUN 교육 플랫폼 신규 개발에 참여하여, WebView 기반 프론트엔드 화면과 ASP.NET 백엔드 API를 구축했습니다."
 image: "/images/projects/elifun.png"
 technologies: ["React", "Typescript", "Recoil", "Webpack", "Mui"]
 ---

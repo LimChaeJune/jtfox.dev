@@ -4,7 +4,7 @@ company: "KT DS"
 startDate: "2020-09-25"
 endDate: "2021-06-01"
 domain: "Remote Service"
-summary: "코로나 시대에 발맞춰, 원격으로 대리점을 생성하고 관리하는 웹 서비스를 신규 개발했습니다."
+summary: "코로나 시대에 발맞춰, 원격으로 대리점을 생성하고 관리하는 웹 서비스를 개발했습니다."
 image: "/images/projects/varam.png"
 technologies: ["NextJs", "Typescript", "Emotion", "Recoil", "AWS S3"]
 ---

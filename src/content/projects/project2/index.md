@@ -4,7 +4,7 @@ company: "Side Project"
 startDate: "2022-05-01"
 endDate: "2022-06-20"
 domain: "Recruit"
-summary: "블록체인으로 투명하게 경력을 증명하고, 믿을 수 있는 리뷰를 만드는 플랫폼을 개발했어요."
+summary: "블록체인으로 투명하게 경력을 증명하고, 믿을 수 있는 리뷰를 만드는 플랫폼을 개발했습니다."
 image: "/images/projects/blockreview.png"
 technologies: ["React", "Typescript", "Recoil", "Mui", "ERC-20", "Solidty"]
 ---

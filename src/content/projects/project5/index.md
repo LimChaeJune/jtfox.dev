@@ -4,7 +4,7 @@ company: "평화이즈"
 startDate: "2020-02-01"
 endDate: "2020-08-01"
 domain: "Healthcare"
-summary: "WPF 기반의 의료 데이터 통계 및 시각화 시스템을 개발하며, 아키텍처 설계와 성능 최적화 역량을 길렀습니다."
+summary: "WPF 기반의 의료 데이터 통계 및 시각화 시스템을 개발했습니다."
 image: "/images/projects/M2.png"
 technologies: ["WPF", "C#", ".NET", "DevExpress", "SQL"]
 ---
